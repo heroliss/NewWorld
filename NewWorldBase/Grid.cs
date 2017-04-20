@@ -86,6 +86,7 @@ namespace NewWorldBase
         public void AddHeat(double deltaHeat) //根据改变的热能重新为每个物体分配热能和温度
         {
             heat += deltaHeat;
+            Debug.Assert(heat >= 0);
             temperature = heat / specificHeatCapacity / mass;
             foreach (WorldObject obj in GetAllObj())
             {
@@ -94,6 +95,10 @@ namespace NewWorldBase
         }
         public void InitTemperature(double temperature) //初始化用的温度设置函数
         {
+            if (mass == 0)
+            {
+                return;
+            }
             this.temperature = temperature ;
             heat = Temperature * specificHeatCapacity * mass;
             foreach (WorldObject obj in GetAllObj())

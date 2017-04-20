@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +39,9 @@ namespace NewWorldBase
 
         public bool AddMass(double deltaMass,double deltaHeat)
         {
+            Debug.Assert(deltaMass != 0);
             double deltaVolume = deltaMass / Density;
-            if (currentGrid.FreeSpace < deltaVolume || -currentGrid.UsedSpace > deltaVolume)
+            if (currentGrid.FreeSpace < deltaVolume || -mass > deltaMass)
                 return false;
             mass += deltaMass;
             volume += deltaVolume;
@@ -48,7 +50,7 @@ namespace NewWorldBase
         }
         public bool AddVolume(double deltaVolume,double deltaHeat)
         {
-            if (currentGrid.FreeSpace < deltaVolume || -currentGrid.UsedSpace > deltaVolume)
+            if (currentGrid.FreeSpace < deltaVolume || -volume > deltaVolume)
                 return false;
             double deltaMass = deltaVolume * Density;
             mass += deltaMass;
