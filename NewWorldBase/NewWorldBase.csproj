@@ -42,17 +42,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Grid.cs" />
+    <Compile Include="Client\WorldObjects\IndexMapping.cs" />
+    <Compile Include="Client\WorldObjects\Oxygen.cs" />
+    <Compile Include="Client\WorldObjects\Rock.cs" />
+    <Compile Include="Client\WorldObjects\Sand.cs" />
+    <Compile Include="Client\WorldObjects\Silver.cs" />
+    <Compile Include="Client\WorldObjects\Water.cs" />
+    <Compile Include="Server\Grid.cs" />
+    <Compile Include="Client\GridInfo.cs" />
     <Compile Include="NoRepeatRandom.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Program2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorldGrid.cs" />
-    <Compile Include="WorldObject.cs" />
-    <Compile Include="WorldObjects\Oxygen.cs" />
-    <Compile Include="WorldObjects\Rock.cs" />
-    <Compile Include="WorldObjects\Silver.cs" />
-    <Compile Include="WorldObjects\Sand.cs" />
-    <Compile Include="WorldObjects\Water.cs" />
+    <Compile Include="Server\WorldGrid.cs" />
+    <Compile Include="Client\WorldObjectInfo.cs" />
+    <Compile Include="Server\WorldObject.cs" />
+    <Compile Include="Server\WorldObjects\IndexMapping.cs" />
+    <Compile Include="Server\WorldObjects\Oxygen.cs" />
+    <Compile Include="Server\WorldObjects\Rock.cs" />
+    <Compile Include="Server\WorldObjects\Silver.cs" />
+    <Compile Include="Server\WorldObjects\Sand.cs" />
+    <Compile Include="Server\WorldObjects\Water.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

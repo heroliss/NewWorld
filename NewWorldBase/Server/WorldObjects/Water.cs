@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NewWorldBase.WorldObjects
+namespace NewWorldBase.Server.WorldObjects
 {
     public class Water : WorldObject
     {
@@ -20,11 +20,6 @@ namespace NewWorldBase.WorldObjects
         public override void Do()
         {
             throw new NotImplementedException();
-        }
-
-        public override WorldObject GetObjectFromGridAsTheSameType(Grid grid)
-        {
-            return grid.Water;
         }
     }
 }

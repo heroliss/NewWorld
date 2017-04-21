@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-namespace NewWorldBase.WorldObjects
+namespace NewWorldBase.Client.WorldObjects
 {
-    public class Rock : WorldObject
+    [Serializable]
+    public class Rock : WorldObjectInfo
     {
-        public Rock(Grid currentGrid) : base(currentGrid)
+        public Rock(GridInfo currentGrid) : base(currentGrid)
         {
         }
 
@@ -16,15 +16,5 @@ namespace NewWorldBase.WorldObjects
         public override double SpecificHeatCapacity { get { return 800; } }// J/( kg·K )
 
         public override double ThermalConductivity { get { return 2.5 * 100; } }// W/(m·K) 的一百倍
-
-        public override void Do()
-        {
-            
-        }
-
-        public override WorldObject GetObjectFromGridAsTheSameType(Grid grid)
-        {
-            return grid.Rock;
-        }
     }
 }

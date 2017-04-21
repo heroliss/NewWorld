@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NewWorldBase;
-namespace NewWorldBase.WorldObjects
+namespace NewWorldBase.Client.WorldObjects
 {
-    public class Oxygen : WorldObject
+    [Serializable]
+    public class Oxygen : WorldObjectInfo
     {
-        public Oxygen(Grid currentGrid) : base(currentGrid)
+        public Oxygen(GridInfo currentGrid) : base(currentGrid)
         {
 
         }
@@ -18,14 +19,5 @@ namespace NewWorldBase.WorldObjects
 
         public override double ThermalConductivity { get { throw new NotImplementedException(); } }
 
-        public override void Do()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override WorldObject GetObjectFromGridAsTheSameType(Grid grid)
-        {
-            return grid.Oxygen;
-        }
     }
 }

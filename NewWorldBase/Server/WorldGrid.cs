@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace NewWorldBase
+namespace NewWorldBase.Server
 {
     public class WorldGrid
     {
+
+        #region 字段
         private int size_x, size_y, size_z, size_xz;
         private int totalSize;
         private NoRepeatRandom noRepeatRandom;
@@ -15,7 +17,9 @@ namespace NewWorldBase
         private Grid[,,] grids;
         private int iterations = 0; //世界迭代次数（相当于运行时间）
         private double gravity; //重力加速度
-        #region 字段封装
+        #endregion
+
+        #region 属性
         public int Size_x { get { return size_x; } }
         public int Size_y { get { return size_y; } }
         public int Size_z { get { return size_z; } }
@@ -26,7 +30,7 @@ namespace NewWorldBase
         public double Gravity { get { return gravity; } }
         #endregion
 
-
+        #region 函数
         public WorldGrid(int size_x, int size_y, int size_z,
             double maxGridVolume = 1000000, double gravity = 10) //10^6 cm^3 即 1 m^3
         {
@@ -109,7 +113,7 @@ namespace NewWorldBase
             //防止传热量传递后高温物体变低温
             double averageTemperature = //最终平均温度
                 (grid1.Heat + grid2.Heat) / (grid1.SpecificHeatCapacity * grid1.Mass + grid2.SpecificHeatCapacity * grid2.Mass);
-            double  maxDeltaHeat = //最大可传递热能
+            double maxDeltaHeat = //最大可传递热能
                 (grid1.Temperature - averageTemperature) * grid1.SpecificHeatCapacity * grid1.Mass;
 
             Debug.Assert((float)((averageTemperature - grid2.Temperature) * grid2.SpecificHeatCapacity * grid2.Mass) == (float)maxDeltaHeat);
@@ -132,4 +136,5 @@ namespace NewWorldBase
             grid2.AddHeat(deltaHeat);
         }
     }
+    #endregion
 }

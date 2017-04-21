@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NewWorldBase.WorldObjects;
 using System.Diagnostics;
+using NewWorldBase.Server.WorldObjects;
+using NewWorldBase.Client;
 
-namespace NewWorldBase
+namespace NewWorldBase.Server
 {
     public class Grid
     {
         #region 网格信息
+        [NonSerialized]
         private WorldGrid worldGrid; //该格子所在的世界网格
         private int x, y, z; //位置
         public int X { get { return x; } }
@@ -22,7 +22,8 @@ namespace NewWorldBase
         public Grid ForwardGrid { get { if (z + 1 >= worldGrid.Size_z) return null; return worldGrid.Grids[x, y, z + 1]; } }
         public Grid BackwardGrid { get { if (z - 1 <= worldGrid.Size_z) return null; return worldGrid.Grids[x, y, z - 1]; } }
         #endregion
-        #region 私有变量
+
+        #region 字段
         private double freeSpace;
         private double usedSpace;
         private double mass;
@@ -34,8 +35,9 @@ namespace NewWorldBase
         private double specificHeatCapacity;
         private double thermalConductivity;
         #endregion
-        /*-------------------属性---------------------*/
+
         #region 属性
+        /*-------------------属性---------------------*/
         public double Mass { get { return mass; } }//质量   
         public double FreeSpace { get { return freeSpace; } }//剩余空间
         public double UsedSpace { get { return usedSpace; } }//已用空间
@@ -50,25 +52,15 @@ namespace NewWorldBase
         public double SpecificHeatCapacity { get { return specificHeatCapacity; } }
         //热导率（单位时间内对每个方向的传导能量 = 该值*温差 ）
         public double ThermalConductivity { get { return thermalConductivity; } }
-
         #endregion
-        /*---------------------------------------------------*/
 
         #region 物体
-        private Type[] WorldObjectTypes;
-        private Water water;
-        private Oxygen oxygen;
-        private Silver silver;
-        private Sand sand;
-        private Rock rock;
+        private Dictionary<string,WorldObject> objs;
+        public Dictionary<string,WorldObject> Objs { get { return objs; } }
 
-        public Water Water { get { return water; } }
-        public Oxygen Oxygen { get { return oxygen; } }
-        public Silver Silver { get { return silver; } }
-        public Sand Sand { get { return sand; } }
-        public Rock Rock { get { return rock; } }
         #endregion
 
+        #region 构造函数
         public Grid(WorldGrid worldGrid, int x, int y, int z, double freeSpace)
         {
             this.worldGrid = worldGrid;
@@ -76,19 +68,18 @@ namespace NewWorldBase
             this.x = x;
             this.y = y;
             this.z = z;
-            water = new Water(this);
-            oxygen = new Oxygen(this);
-            silver = new Silver(this);
-            sand = new Sand(this);
-            rock = new Rock(this);
+            objs = IndexMapping.CreateObjsList(this);
         }
+        #endregion
+
+        #region 函数
         public void AddHeat(double deltaHeat) //根据改变的热能重新为每个物体分配热能和温度
         {
             heat += deltaHeat;
             Debug.Assert(heat >= 0);
             temperature = heat / specificHeatCapacity / mass;
             double heatSum = 0; //调试用
-            foreach (WorldObject obj in GetAllObj())
+            foreach (WorldObject obj in objs.Values)
             {
                 obj.Temperature = temperature; //该赋值同时更改了obj的热能值
                 heatSum += obj.Heat; //调试用
@@ -101,9 +92,9 @@ namespace NewWorldBase
             {
                 return;
             }
-            this.temperature = temperature ;
+            this.temperature = temperature;
             heat = Temperature * specificHeatCapacity * mass;
-            foreach (WorldObject obj in GetAllObj())
+            foreach (WorldObject obj in objs.Values)
             {
                 obj.Temperature = temperature; //该赋值同时更改了obj的热能值
             }
@@ -116,12 +107,12 @@ namespace NewWorldBase
             mass += deltaMass;
             freeSpace -= deltaVolume;
             usedSpace += deltaVolume;
-            
+
             //重新计算加权平均比热容、加权平均热导率、加权平均密度(该值可由v/m计算求得)
             density = mass / usedSpace;
             specificHeatCapacity = 0;
             thermalConductivity = 0;
-            
+
             if (mass == 0)
             {
                 Debug.Assert(usedSpace == 0);
@@ -130,8 +121,8 @@ namespace NewWorldBase
                 heat = 0;
                 return;
             }
-            double volumeSum = 0,massSum = 0; //调试用
-            foreach (WorldObject obj in GetAllObj())
+            double volumeSum = 0, massSum = 0; //调试用
+            foreach (WorldObject obj in objs.Values)
             {
                 specificHeatCapacity += obj.Mass * obj.SpecificHeatCapacity;
                 thermalConductivity += obj.Mass * obj.ThermalConductivity;
@@ -158,10 +149,10 @@ namespace NewWorldBase
             {
                 return false;
             }
-            foreach (WorldObject obj in GetAllObj()) //每个物体按比例减少质量
+            foreach (string key in objs.Keys)//每个物体按比例减少质量
             {
-                obj.AddMassWithoutHeat(-moveMass * obj.Mass / mass);
-                obj.GetObjectFromGridAsTheSameType(grid).AddMassWithoutHeat(moveMass * obj.Mass / mass);
+                objs[key].AddMassWithoutHeat(-moveMass * objs[key].Mass / mass);
+                grid.objs[key].AddMassWithoutHeat(moveMass * objs[key].Mass / mass);
             }
             MassChanged(-moveMass, -moveMass / density, -moveMass / mass * heat);
             grid.MassChanged(moveMass, moveMass / density, moveMass / mass * heat);
@@ -169,24 +160,39 @@ namespace NewWorldBase
         }
         public void DoAll()
         {
-            foreach (WorldObject obj in GetAllObj())
+            foreach (WorldObject obj in objs.Values)
             {
                 obj.Do();
             }
         }
 
-        public IEnumerable<WorldObject> GetAllObj()
+        public GridInfo GetGridInfo()
         {
-            if (water.Mass > 0)
-                yield return water;
-            if (oxygen.Mass > 0)
-                yield return oxygen;
-            if (silver.Mass > 0)
-                yield return silver;
-            if (sand.Mass > 0)
-                yield return sand;
-            if (rock.Mass > 0)
-                yield return rock;
+            GridInfo gridInfo = new GridInfo();
+            gridInfo.Density = density;
+            gridInfo.Energy = energy;
+            gridInfo.FreeSpace = freeSpace;
+            gridInfo.Heat = heat;
+            gridInfo.Mass = mass;
+            gridInfo.PotentialEnergy = potentialEnergy;
+            gridInfo.SpecificHeatCapacity = specificHeatCapacity;
+            gridInfo.Temperature = temperature;
+            gridInfo.ThermalConductivity = thermalConductivity;
+            gridInfo.UsedSpace = usedSpace;
+            gridInfo.x = x;
+            gridInfo.y = y;
+            gridInfo.z = z;
+            foreach (string key in objs.Keys)
+            {
+                gridInfo.objs[key].Energy = objs[key].Energy;
+                gridInfo.objs[key].Heat = objs[key].Heat;
+                gridInfo.objs[key].Mass = objs[key].Mass;
+                gridInfo.objs[key].PotentialEnergy = objs[key].PotentialEnergy;
+                gridInfo.objs[key].Temperature = objs[key].Temperature;
+                gridInfo.objs[key].Volume = objs[key].Volume;
+            }
+            return gridInfo;
         }
     }
+    #endregion
 }
