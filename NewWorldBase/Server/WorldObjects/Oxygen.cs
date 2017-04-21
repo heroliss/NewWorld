@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NewWorldBase;
-namespace NewWorldBase.Server.WorldObjects
+using NerWorldServer;
+namespace NerWorldServer.Server.WorldObjects
 {
     public class Oxygen : WorldObject
     {

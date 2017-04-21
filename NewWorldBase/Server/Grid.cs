@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using NewWorldBase.Server.WorldObjects;
-using NewWorldBase.Client;
+using NerWorldServer.Server.WorldObjects;
+using NerWorldServer.Client;
 
-namespace NewWorldBase.Server
+namespace NerWorldServer.Server
 {
     public class Grid
     {

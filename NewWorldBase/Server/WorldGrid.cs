@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace NewWorldBase.Server
+namespace NerWorldServer.Server
 {
     public class WorldGrid
     {

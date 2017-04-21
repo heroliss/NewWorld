@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NewWorldBase.Server.WorldObjects
+namespace NerWorldServer.Server.WorldObjects
 {
     public class Silver : WorldObject
     {

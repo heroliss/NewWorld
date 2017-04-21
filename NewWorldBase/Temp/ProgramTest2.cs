@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using NewWorldBase.Server;
-namespace NewWorldBase
+using NerWorldServer.Server;
+namespace NerWorldServer
 {
 
-    class Program2
-    {
+    class ProgramTest2
+    {/*
         static void Main(string[] args)
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -21,6 +21,6 @@ namespace NewWorldBase
             
             Console.Read();
            
-        }
+        }*/
     }
 }
