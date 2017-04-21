@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NewWorldBase
 {
@@ -36,7 +36,19 @@ namespace NewWorldBase
                 return mass;
             }
         }
-
+        /// <summary>
+        /// 不重新分配热能质量增加（多次调用此函数后必须之后统一调用currentGrid.MassChanged）
+        /// </summary>
+        public bool AddMassWithoutHeat(double deltaMass)
+        {
+            Debug.Assert(deltaMass != 0);
+            double deltaVolume = deltaMass / Density;
+            if (currentGrid.FreeSpace < deltaVolume || -mass > deltaMass)
+                return false;
+            mass += deltaMass;
+            volume += deltaVolume;
+            return true;
+        }
         public bool AddMass(double deltaMass,double deltaHeat)
         {
             Debug.Assert(deltaMass != 0);
@@ -58,6 +70,17 @@ namespace NewWorldBase
             currentGrid.MassChanged(deltaMass, deltaVolume, deltaHeat); //热能从这里传递给方格重新分配
             return true;
         }
+        abstract public WorldObject GetObjectFromGridAsTheSameType(Grid grid);
+        //public bool MoveTo(Grid grid,double moveMass)
+        //{
+        //    double moveVolume = moveMass / Density;
+        //    if (mass < moveMass || grid.FreeSpace < moveVolume)
+        //    {
+        //        return false;
+        //    }
+            
+            
+        //}
         public double Energy { get { return energy; } }
         public double Heat { get { return heat; } }
         public double Volume { get { return volume; } }

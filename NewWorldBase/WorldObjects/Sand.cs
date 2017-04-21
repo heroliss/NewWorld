@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NewWorldBase.WorldObjects
 {
@@ -21,6 +20,11 @@ namespace NewWorldBase.WorldObjects
         public override void Do()
         {
             throw new NotImplementedException();
+        }
+
+        public override WorldObject GetObjectFromGridAsTheSameType(Grid grid)
+        {
+            return grid.Sand;
         }
     }
 }

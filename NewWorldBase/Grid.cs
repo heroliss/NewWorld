@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using NewWorldBase.WorldObjects;
 using System.Diagnostics;
 
@@ -63,11 +62,11 @@ namespace NewWorldBase
         private Sand sand;
         private Rock rock;
 
-        public Water Water { get => water; }
-        public Oxygen Oxygen { get => oxygen; }
-        public Silver Silver { get => silver; }
-        public Sand Sand { get => sand; }
-        public Rock Rock { get => rock; }
+        public Water Water { get { return water; } }
+        public Oxygen Oxygen { get { return oxygen; } }
+        public Silver Silver { get { return silver; } }
+        public Sand Sand { get { return sand; } }
+        public Rock Rock { get { return rock; } }
         #endregion
 
         public Grid(WorldGrid worldGrid, int x, int y, int z, double freeSpace)
@@ -88,10 +87,13 @@ namespace NewWorldBase
             heat += deltaHeat;
             Debug.Assert(heat >= 0);
             temperature = heat / specificHeatCapacity / mass;
+            double heatSum = 0; //调试用
             foreach (WorldObject obj in GetAllObj())
             {
                 obj.Temperature = temperature; //该赋值同时更改了obj的热能值
+                heatSum += obj.Heat; //调试用
             }
+            Debug.Assert((float)heatSum == (float)heat);
         }
         public void InitTemperature(double temperature) //初始化用的温度设置函数
         {
@@ -144,6 +146,26 @@ namespace NewWorldBase
             thermalConductivity /= mass;//求得热导率
             //计算混合后的温度
             AddHeat(deltaHeat); //必须放在计算平均比热容后面
+        }
+        /// <summary>
+        /// 按当前网格内的物质比例转移物质
+        /// </summary>
+        /// <param name="moveMass">减少（转移）的物质质量</param>
+        public bool MoveTo(Grid grid, double moveMass)
+        {
+            Debug.Assert(moveMass > 0);
+            if (mass < moveMass)
+            {
+                return false;
+            }
+            foreach (WorldObject obj in GetAllObj()) //每个物体按比例减少质量
+            {
+                obj.AddMassWithoutHeat(-moveMass * obj.Mass / mass);
+                obj.GetObjectFromGridAsTheSameType(grid).AddMassWithoutHeat(moveMass * obj.Mass / mass);
+            }
+            MassChanged(-moveMass, -moveMass / density, -moveMass / mass * heat);
+            grid.MassChanged(moveMass, moveMass / density, moveMass / mass * heat);
+            return true;
         }
         public void DoAll()
         {

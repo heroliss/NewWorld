@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NewWorldBase
 {
@@ -20,11 +19,11 @@ namespace NewWorldBase
         public int Size_x { get { return size_x; } }
         public int Size_y { get { return size_y; } }
         public int Size_z { get { return size_z; } }
-        public int TotalSize { get => totalSize; }
+        public int TotalSize { get { return totalSize; } }
         public double MaxGridVolume { get { return maxGridVolume; } }
-        public Grid[,,] Grids { get => grids; }
-        public int Iterations { get => iterations; }
-        public double Gravity { get => gravity; }
+        public Grid[,,] Grids { get { return grids; } }
+        public int Iterations { get { return iterations; } }
+        public double Gravity { get { return gravity; } }
         #endregion
 
 
@@ -110,10 +109,10 @@ namespace NewWorldBase
             //防止传热量传递后高温物体变低温
             double averageTemperature = //最终平均温度
                 (grid1.Heat + grid2.Heat) / (grid1.SpecificHeatCapacity * grid1.Mass + grid2.SpecificHeatCapacity * grid2.Mass);
-            double maxDeltaHeat = //最大可传递热能
+            double  maxDeltaHeat = //最大可传递热能
                 (grid1.Temperature - averageTemperature) * grid1.SpecificHeatCapacity * grid1.Mass;
 
-            //Debug.Assert((averageTemperature - grid2.Temperature) * grid2.SpecificHeatCapacity * grid2.Mass == maxDeltaHeat);
+            Debug.Assert((float)((averageTemperature - grid2.Temperature) * grid2.SpecificHeatCapacity * grid2.Mass) == (float)maxDeltaHeat);
 
             if (deltaHeat > 0)
             {
