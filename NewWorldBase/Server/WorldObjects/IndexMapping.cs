@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NerWorldServer.Server.WorldObjects
+namespace NewWorldServer.Server.WorldObjects
 {
     static public class IndexMapping
     {

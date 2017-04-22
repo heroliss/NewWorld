@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using NerWorldServer.Server;
-namespace NerWorldServer
+using NewWorldServer.Server;
+namespace NewWorldServer
 {
 
     class ProgramTest2

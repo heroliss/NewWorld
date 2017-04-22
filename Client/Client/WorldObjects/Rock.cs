@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-namespace NerWorldServer.Client.WorldObjects
+namespace NewWorldServer.Client.WorldObjects
 {
     [Serializable]
     public class Rock : WorldObjectInfo

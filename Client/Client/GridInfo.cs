@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NerWorldServer.Client.WorldObjects;
-namespace NerWorldServer.Client
+using NewWorldServer.Client.WorldObjects;
+namespace NewWorldServer.Client
 {
     [Serializable]
     public class GridInfo

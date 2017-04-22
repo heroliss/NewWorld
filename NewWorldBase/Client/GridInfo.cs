@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NerWorldServer.Client.WorldObjects;
-namespace NerWorldServer.Client
+namespace NewWorldServer.Client
 {
     [Serializable]
-    public class GridInfo
+    public struct GridInfo
     {
         #region 网格信息
         public int x, y, z; //位置
@@ -29,10 +28,5 @@ namespace NerWorldServer.Client
         #region 物体
         public Dictionary<string,WorldObjectInfo> objs;
         #endregion
-
-        public GridInfo()
-        {
-            objs = IndexMapping.CreateObjsInfoList(this);
-        }
     }
 }

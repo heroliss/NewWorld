@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using NerWorldServer.Server.WorldObjects;
-using NerWorldServer.Client;
+using NewWorldServer.Server.WorldObjects;
+using NewWorldServer.Client;
 
-namespace NerWorldServer.Server
+namespace NewWorldServer.Server
 {
     public class Grid
     {
@@ -166,30 +166,33 @@ namespace NerWorldServer.Server
             }
         }
 
-        public GridInfo GetGridInfo()
+        public Dictionary<string,Dictionary<string,double>> GetGridInfo()
         {
-            GridInfo gridInfo = new GridInfo();
-            gridInfo.Density = density;
-            gridInfo.Energy = energy;
-            gridInfo.FreeSpace = freeSpace;
-            gridInfo.Heat = heat;
-            gridInfo.Mass = mass;
-            gridInfo.PotentialEnergy = potentialEnergy;
-            gridInfo.SpecificHeatCapacity = specificHeatCapacity;
-            gridInfo.Temperature = temperature;
-            gridInfo.ThermalConductivity = thermalConductivity;
-            gridInfo.UsedSpace = usedSpace;
-            gridInfo.x = x;
-            gridInfo.y = y;
-            gridInfo.z = z;
+            Dictionary<string, Dictionary<string, double>> gridInfo = new Dictionary<string, Dictionary<string, double>>();
+            gridInfo["GridProperty"] = new Dictionary<string, double>();
+            gridInfo["GridProperty"]["Density"] = density;
+            gridInfo["GridProperty"]["Energy"] = energy;
+            gridInfo["GridProperty"]["FreeSpace"] = freeSpace;
+            gridInfo["GridProperty"]["Heat"] = heat;
+            gridInfo["GridProperty"]["Mass"] = mass;
+            gridInfo["GridProperty"]["PotentialEnergy"] = potentialEnergy;
+            gridInfo["GridProperty"]["SpecificHeatCapacity"] = specificHeatCapacity;
+            gridInfo["GridProperty"]["Temperature"] = temperature;
+            gridInfo["GridProperty"]["ThermalConductivity"] = thermalConductivity;
+            gridInfo["GridProperty"]["UsedSpace"] = usedSpace;
+            gridInfo["GridProperty"]["X"] = x;
+            gridInfo["GridProperty"]["Y"] = y;
+            gridInfo["GridProperty"]["Z"] = z;
+            
             foreach (string key in objs.Keys)
             {
-                gridInfo.objs[key].Energy = objs[key].Energy;
-                gridInfo.objs[key].Heat = objs[key].Heat;
-                gridInfo.objs[key].Mass = objs[key].Mass;
-                gridInfo.objs[key].PotentialEnergy = objs[key].PotentialEnergy;
-                gridInfo.objs[key].Temperature = objs[key].Temperature;
-                gridInfo.objs[key].Volume = objs[key].Volume;
+                gridInfo[key] = new Dictionary<string, double>();
+                gridInfo[key]["Energy"] = objs[key].Energy;
+                gridInfo[key]["Heat"] = objs[key].Heat;
+                gridInfo[key]["Mass"] = objs[key].Mass;
+                gridInfo[key]["PotentialEnergy"] = objs[key].PotentialEnergy;
+                gridInfo[key]["Temperature"] = objs[key].Temperature;
+                gridInfo[key]["Volume"] = objs[key].Volume;
             }
             return gridInfo;
         }

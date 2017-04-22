@@ -57,15 +57,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\WorldObjects\IndexMapping.cs" />
-    <Compile Include="Client\WorldObjects\Oxygen.cs" />
-    <Compile Include="Client\WorldObjects\Rock.cs" />
-    <Compile Include="Client\WorldObjects\Sand.cs" />
-    <Compile Include="Client\WorldObjects\Silver.cs" />
-    <Compile Include="Client\WorldObjects\Water.cs" />
     <Compile Include="Server\Grid.cs" />
     <Compile Include="Client\GridInfo.cs" />
     <Compile Include="NoRepeatRandom.cs" />
+    <Compile Include="TCPServer.cs" />
     <Compile Include="Temp\ProgramTest.cs" />
     <Compile Include="Temp\ProgramTest2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NerWorldServer.Client
+namespace NewWorldServer.Client
 {
     class Program
     {
@@ -25,6 +25,8 @@ namespace NerWorldServer.Client
                 i++;  Console.WriteLine(i);
                 string receiveString;
                 receiveData = client.Receive(ref serverPoint);//接收数据 
+                Console.WriteLine("服务器地址:{0} 是否来自服务器：{1}",
+                    serverPoint.Address,serverPoint.Address.Equals(serverIP));
                 receiveString = Encoding.Default.GetString(receiveData);
                 Console.WriteLine(receiveString);
                 

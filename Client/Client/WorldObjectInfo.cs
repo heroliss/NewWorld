@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace NerWorldServer.Client
+namespace NewWorldServer.Client
 {
     [Serializable]
     abstract public class WorldObjectInfo

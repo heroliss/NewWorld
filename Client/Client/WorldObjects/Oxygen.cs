@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NerWorldServer;
-namespace NerWorldServer.Client.WorldObjects
+using NewWorldServer;
+namespace NewWorldServer.Client.WorldObjects
 {
     [Serializable]
     public class Oxygen : WorldObjectInfo

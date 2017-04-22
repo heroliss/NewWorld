@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NerWorldServer
+namespace NewWorldServer
 {
     public class NoRepeatRandom : IEnumerable<int>  //剔除模式随机数生成器
     {

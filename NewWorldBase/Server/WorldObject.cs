@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace NerWorldServer.Server
+namespace NewWorldServer.Server
 {
     abstract public class WorldObject
     {
