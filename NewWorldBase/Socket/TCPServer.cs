@@ -8,6 +8,8 @@ using Logrila.Logging;
 using NewWorldServer.Core;
 using NewWorldServer.SessionWork;
 using System.Diagnostics;
+using NewWorldServer.Socket.SessionWorks.GridsTakers;
+using System.Timers;
 
 namespace NewWorldServer
 {
@@ -17,14 +19,53 @@ namespace NewWorldServer
         TcpSocketSaeaServer server;
         GridWorld gridWorld;
         Packager packager;
+        SqureGridsTaker squreGridsTaker;
         Stopwatch stopwatch = new Stopwatch();
+
+        Timer atim;
+        long maxNextTime = 0;
+        long maxBroadTime = 0; 
+        public void StartLoop()
+        {
+            atim = new Timer()
+            {
+                Interval = 500
+            };
+            atim.Elapsed += (sender, e) => 
+            {
+                stopwatch.Restart();
+                server.BroadcastAsync(packager.EncodeGrids(squreGridsTaker, 25, 2, 25)).Wait();
+                stopwatch.Stop();
+                if (stopwatch.ElapsedMilliseconds>maxBroadTime)
+                {
+                    maxBroadTime = stopwatch.ElapsedMilliseconds;
+                    Console.WriteLine("产生最长广播用时：{0}", maxBroadTime);
+                }
+                stopwatch.Restart();
+                gridWorld.Next();
+                stopwatch.Stop();
+                if (stopwatch.ElapsedMilliseconds > maxNextTime)
+                {
+                    maxNextTime = stopwatch.ElapsedMilliseconds;
+                    Console.WriteLine("产生最长计算用时：{0}", maxNextTime);
+                }
+            };
+            atim.Start();
+            Console.WriteLine("循环执行已启动！");
+        }
+        public void StopLoop()
+        {
+            atim.Stop();
+            Console.WriteLine("循环执行已停止！");
+        }
         public void Run()
         {
             gridWorld = CreateGridWorld();
             Console.WriteLine("世界创建完成！");
 
             var config = new TcpSocketSaeaServerConfiguration();
-            server = new TcpSocketSaeaServer(port, new Dispatcher(), config);
+            squreGridsTaker = new SqureGridsTaker(gridWorld.Grids,5,3,25);
+            server = new TcpSocketSaeaServer(port, new Dispatcher(gridWorld,squreGridsTaker), config);
             server.Listen();
             Console.WriteLine("TCP服务端已启动！监听端口：{0}", server.ListenedEndPoint);
 
@@ -40,10 +81,15 @@ namespace NewWorldServer
                         switch (text)
                         {
                             case "broad":
-                                IEnumerable<Grid> squareGrids = packager.getSquareGrids(gridWorld.Grids, 15, 5, 15);
-                                byte[] message = packager.PackageGrids(squareGrids);
+                                byte[] message = packager.EncodeGrids(squreGridsTaker, 25, 2, 25);
                                 await server.BroadcastAsync(message);
                                 Console.WriteLine("广播 -> {0}字节", message.Length);
+                                break;
+                            case "start loop":
+                                StartLoop();
+                                break;
+                            case "stop loop":
+                                StopLoop();
                                 break;
                             case "next":
                                 stopwatch.Restart();
@@ -83,14 +129,16 @@ namespace NewWorldServer
             }
         }
 
+       
+
         private GridWorld CreateGridWorld()
         {
-            GridWorld gridWorld = new GridWorld(100, 10, 100);
+            GridWorld gridWorld = new GridWorld(50, 3, 50);
             foreach (var item in gridWorld.Grids)
             {
-                item.Objs[0].AddMass(2000, 50000);
+                item.Objs[0].AddMass(3, 0);
             }
-            gridWorld.Grids[15, 9, 15].InitTemperature(300);
+            gridWorld.Grids[25, 2, 25].InitTemperature(30000);
             return gridWorld;
         }
     }

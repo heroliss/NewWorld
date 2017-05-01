@@ -71,6 +71,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Core\Grid.cs" />
     <Compile Include="Socket\Dispatcher.cs" />
+    <Compile Include="Socket\SessionWorks\GridsTakers\IGridsTaker.cs" />
+    <Compile Include="Socket\SessionWorks\GridsTakers\SqureGridsTaker.cs" />
     <Compile Include="Socket\SessionWorks\SessionWork.cs" />
     <Compile Include="Socket\Buffer\BufferValidator.cs" />
     <Compile Include="Socket\Buffer\ISegmentBufferManager.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Socket\Buffer\UnableToAllocateBufferException.cs" />
     <Compile Include="Socket\Buffer\UnableToCreateMemoryException .cs" />
     <Compile Include="Socket\SessionWorks\Packager.cs" />
+    <Compile Include="Socket\SessionWorks\Unpackager.cs" />
     <Compile Include="Socket\Tcp\Client\SAEA\InternalTcpSocketSaeaClientMessageDispatcherImplementation.cs" />
     <Compile Include="Socket\Tcp\Client\SAEA\ITcpSocketSaeaClientMessageDispatcher.cs" />
     <Compile Include="Socket\Tcp\Client\SAEA\TcpSocketSaeaClient.cs" />
